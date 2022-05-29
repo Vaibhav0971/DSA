@@ -52,6 +52,44 @@ void reverse(string& s, int i,int j){
     // reverse(s, i++, j--); //not working getting segmentation fault error
 }
 
+bool isSorted(int arr[], int size){
+    if(size == 0 || size == 1) return true;
+    bool ans;
+    
+    if(arr[0] > arr[1]) return false;
+    else ans = isSorted(arr+1, size-1);
+
+    return ans;
+}
+
+int sum(int arr[], int size){
+    if(size == 0) return 0;
+    if(size == 1) return arr[0];
+
+    return arr[size] + sum(arr, size-1);
+}
+
+bool linearSearch(int arr[], int size, int target){
+    if(size == 0) return false;
+
+    if(target == arr[size-1]) return true;
+
+    bool ans = linearSearch(arr, size-1, target);
+
+    if(ans) return true;
+    return false;
+}
+
+bool binarySearch(int arr[], int target, int s, int e){
+    if(s>e) return false;
+
+    int mid = s + (e-s)/2;
+    if(arr[mid] == target) return true;
+
+    if(target > arr[mid]) return binarySearch(arr, target, mid+1, e);
+    else return binarySearch(arr, target, s, mid-1);
+}
+
 int main() {
 
     // cout<<factorial(5);
@@ -64,9 +102,18 @@ int main() {
 
     // cout<<fastExpo(11);
 
-    string name = "Vaibhav";
-    string *s = &name;
-    reverse(name, 0, name.length()-1);
-    cout<<name;
+    // string name = "Vaibhav";
+    // string *s = &name;
+    // reverse(name, 0, name.length()-1);
+    // cout<<name;
+
+    // int arr2[] = {4,2,6,9,1,0,12};
+    // cout<<isSorted(arr2, 7);
+    // cout<<sum(arr2, 7);
+    // cout<<linearSearch(arr2, 7, 0);
+
+    int arr3[] = {1,2,3,4,5,6,7,8,9};
+    cout<<binarySearch(arr3, 90, 0, 6);
+
 
 }
