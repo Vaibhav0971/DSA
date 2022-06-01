@@ -90,6 +90,26 @@ bool binarySearch(int arr[], int target, int s, int e){
     else return binarySearch(arr, target, s, mid-1);
 }
 
+string reverseString(string str, int i){
+    if(i == str.length()) return "";
+
+    string ans =  reverseString(str, i-1);
+    ans.push_back(str[i]);
+    return ans;
+}
+
+int reverseNumber(int num){
+    if(num == 0) return 0;
+
+    int digit = 0;
+    digit = num % 10;
+    num /= 10;
+
+    int ans = reverseNumber(num);
+
+    return ans * 10 + digit;    
+}
+
 int main() {
 
     // cout<<factorial(5);
@@ -112,8 +132,9 @@ int main() {
     // cout<<sum(arr2, 7);
     // cout<<linearSearch(arr2, 7, 0);
 
-    int arr3[] = {1,2,3,4,5,6,7,8,9};
-    cout<<binarySearch(arr3, 90, 0, 6);
+    // int arr3[] = {1,2,3,4,5,6,7,8,9};
+    // cout<<binarySearch(arr3, 90, 0, 6);
 
-
+    // cout<<reverseString("qwer", 0);
+    cout<<reverseNumber(123);
 }
