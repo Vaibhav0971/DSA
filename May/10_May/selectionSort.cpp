@@ -10,7 +10,6 @@ void printArray(int arr[], int size){
     cout<<endl;
 }
 
-
 int * swapArrayElements(int arr[], int firstEl, int secondEl){
     int buffer = arr[firstEl];
     arr[firstEl] = arr[secondEl];

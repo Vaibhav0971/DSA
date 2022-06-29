@@ -2,6 +2,13 @@
 
 using namespace std;
 
+void printArray(int arr[], int size){
+    for(int i=0; i<size; i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+}
+
 int factorial(int num){
     if(num == 1) return 1;
     return num*factorial(num-1);
@@ -110,6 +117,47 @@ int reverseNumber(int num){
     return ans * 10 + digit;    
 }
 
+void bubbleSort(int arr[], int size){
+    if(size == 0 || size == 1) return;
+
+    for(int i=0; i<size-1; i++){
+        if(arr[i] > arr[i+1]){
+            swap(arr[i], arr[i+1]);
+        }
+    }
+
+    bubbleSort(arr, size-1);
+}
+
+void selectionSort(int arr[], int size){
+    if(size == 0 || size == 1) return;
+
+    int minEl = 0, i;
+    for(i=1; i<size; i++){
+        if(arr[minEl] > arr[i]){
+            minEl = i;
+        }
+    }
+    swap(arr[minEl], arr[0]);
+
+    selectionSort(arr+1, size-1);
+}
+
+void insertionSort(int arr[], int size){
+    int swaped = false;
+
+    for(int i=1; i<size; i++){
+        if(arr[i-1] > arr[i]){
+            swap(arr[i-1], arr[i]);
+            swaped = true;
+        }
+    }
+
+    if(!swaped) return;
+
+    insertionSort(arr, size);
+}
+
 int main() {
 
     // cout<<factorial(5);
@@ -136,5 +184,11 @@ int main() {
     // cout<<binarySearch(arr3, 90, 0, 6);
 
     // cout<<reverseString("qwer", 0);
-    cout<<reverseNumber(123);
+    // cout<<reverseNumber(123);
+
+    // int arr4[] = {9,7,5,3,1};
+    // bubbleSort(arr4, 5);
+    // selectionSort(arr4, 5);
+    // insertionSort(arr4, 5);
+    // printArray(arr4, 3);
 }
