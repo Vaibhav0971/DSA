@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include<math.h>
 
 using namespace std;
 
@@ -88,16 +89,16 @@ void keypad(string digits, int index, string mapping[], string output, vector<st
     }
 }    
 
-void permutations(string str, int index, string output, vector<string>& ans){
+void permutations(string str, int index, vector<string>& ans){
     if(index >= str.length()){
-        ans.push_back(output);
+        ans.push_back(str);
         return;
     }
     
     for(int i=index; i<str.length(); i++){
-        output = str;
-        swap(output[index], output[i]);
-        permutations(str, index+1, output, ans);
+        swap(str[index], str[i]);
+        permutations(str, index+1, ans);
+        swap(str[index], str[i]);
     }
 }
 
@@ -163,8 +164,24 @@ void subset(vector<int> set, int index, int output, vector<int>& ans){
         output -= set[i];
     }
 }
+     
+int Kth_SymbolInGrammer(int n, int k){
+    if(n == 1) return 0;
+    
+    int mid = pow(2, n-1)/2;
+    
+    if(k <= mid){
+        return Kth_SymbolInGrammer(n-1, k);
+    }
+    else{
+        return !Kth_SymbolInGrammer(n-1, k-mid);
+    }
+}
 
 int main(){
+
+    // int n=5, k=5;
+    // cout<<Kth_SymbolInGrammer(n, k);
 
     // vector<int> ans;
     // int output = 0;
@@ -214,9 +231,8 @@ int main(){
 
     // string str = "abc";
     // vector<string> ans;
-    // string output = "";
     // int index = 0;
-    // permutations(str, index, output, ans);
+    // permutations(str, index, ans);
     
     // for(int i=0; i<ans.size(); i++){
     //     cout<<ans[i]<<", ";
