@@ -93,6 +93,8 @@ int main(){
 
     // cout<<getFibbo(7);
 
+    vector<int> art(0);
+
     
     vector<int> arr = {1,1,1,5,9,8};
     cout<<solve(arr);
