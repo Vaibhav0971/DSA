@@ -462,6 +462,135 @@ vector<int> leftViewRec(Node *root){
     return ans;
 }
 
+void solveDiagonal(Node* root, int diagonal, map<int, vector<int>>& mp){
+    if(root == NULL) return;
+
+    mp[diagonal].push_back(root->data);
+
+    solveDiagonal(root->left, diagonal + 1, mp);
+
+    solveDiagonal(root->right, diagonal, mp);
+}
+
+vector<int> diagonal(Node *root){
+    map<int, vector<int>> mp;
+
+    int diagonal = 0;
+
+    solveDiagonal(root, diagonal, mp);
+
+    vector<int> ans;
+    
+    for(auto i : mp)
+        for(auto j : i.second)
+            ans.push_back(j);
+
+    return ans;
+}
+
+Node* lca(Node* root ,int n1 ,int n2 ){
+    if(root == NULL) return NULL;
+    
+    if(root -> data == n1 || root -> data == n2) return root;
+    
+    Node* left = lca(root -> left, n1, n2);
+    Node* right = lca(root -> right, n1, n2);
+    
+    if(left != NULL && right != NULL) return root;
+    if(left != NULL && right == NULL) return left;
+    if(left == NULL && right != NULL) return right;
+    return NULL;
+}
+
+// Burn Tree
+void createParentMapping(Node* root, int& target, map<Node*, Node*>& nodeToParent, Node*& targetNode){
+    if(root == NULL) return;
+    
+    if(target == root -> data){
+        targetNode = root;
+    }
+    if(root -> left != NULL) {
+        nodeToParent[root -> left] = root;
+    }
+    if(root -> right != NULL) {
+        nodeToParent[root -> right] = root;
+    }
+    
+    createParentMapping(root -> left, target, nodeToParent, targetNode);
+    createParentMapping(root -> right, target, nodeToParent, targetNode);
+    
+}
+
+void burnTree(Node* targetNode, map<Node*, Node*> nodeToParent, int& count){
+    map<Node*, bool> visited;
+    
+    queue<Node*> q;
+    q.push(targetNode);
+    visited[targetNode] = true;
+    
+    while(!q.empty()){
+        
+        int size = q.size();
+        
+        for(int i=0; i<size; i++){
+            Node* front = q.front();
+            q.pop();
+            
+            Node* parent = nodeToParent[front];
+            Node* left = front -> left;
+            Node* right = front -> right;
+            
+            if(parent != NULL && visited[parent] != true){
+                q.push(parent);
+                visited[parent] = true;
+            }
+            if(left != NULL && visited[left] != true){
+                q.push(left);
+                visited[left] = true;
+            }
+            if(right != NULL && visited[right] != true){
+                q.push(right);
+                visited[right] = true;
+            }
+        }
+        
+        if(!q.empty()) count++;
+    }
+}
+
+int minTime(Node* root, int target){
+    int count = 0;
+    map<Node*, Node*> nodeToParent;
+    
+    Node* targetNode = NULL;
+    createParentMapping(root, target, nodeToParent, targetNode);
+    
+    burnTree(targetNode, nodeToParent, count);
+    
+    return count;
+}
+
+// Flatten binary tree to linked list -- using Morris Traversal
+void flatten(Node *root) {
+    Node* curr = root;
+    
+    while(curr != NULL){
+        if(curr -> left){
+            Node* predecessor = curr -> left;
+            
+            while(predecessor -> right)
+                predecessor = predecessor -> right;
+            
+            predecessor -> right = curr -> right;
+            curr -> right = curr -> left;
+            curr -> left = NULL;
+        }
+        else{
+            curr = curr -> right;
+        }
+    }
+}
+
 int main(){
     Node* root = NULL;
 
