@@ -1,5 +1,6 @@
 #include<iostream>
 #include<queue>
+#include<stack>
 using namespace std;
 
 class Node{
@@ -167,6 +168,81 @@ Info solveLargestBST(Node* root, int& ans){
 int largestBST(Node *root){
     int ans = 0;
     solveLargestBST(root, ans);
+    return ans;
+}
+
+// MERGE 2 BST's
+
+void helper(Node* root, stack<Node*> &s){
+    if(root == NULL) return;
+    
+    while(root != NULL){
+        s.push(root);
+        root = root->left;
+    }
+}
+
+void solve(stack<Node*>& s1, stack<Node*>& s2, vector<int>& ans){
+    Node* temp1 = s1.top();
+    Node* temp2 = s2.top();
+    
+    while(!s1.empty() && !s2.empty()){
+        temp1 = s1.top();
+        temp2 = s2.top();
+        
+        if(temp1 -> data < temp2 -> data){
+            ans.push_back(temp1 -> data);
+            s1.pop();
+            
+            helper(temp1 -> right, s1);
+        }
+        else if(temp1 -> data > temp2 -> data){
+            ans.push_back(temp2 -> data);
+            s2.pop();
+            
+            helper(temp2 -> right, s2);
+        }
+        else if(temp1 -> data == temp2 -> data){
+            ans.push_back(temp1 -> data);
+            s1.pop();
+            ans.push_back(temp2 -> data);
+            s2.pop();
+            
+            helper(temp1 -> right, s1);
+            helper(temp2 -> right, s2);
+        }
+        
+    }
+    
+    while(!s1.empty()){
+        temp1 = s1.top();
+        
+        ans.push_back(temp1 -> data);
+        s1.pop();
+        
+        helper(temp1 -> right, s1);
+    }
+    
+    while(!s2.empty()){
+        temp2 = s2.top();
+        
+        ans.push_back(temp2 -> data);
+        s2.pop();
+        
+        helper(temp2 -> right, s2);
+    }
+}
+
+vector<int> merge(Node *root1, Node *root2) {
+    vector<int> ans;
+    stack<Node*> s1;
+    stack<Node*> s2;
+    
+    helper(root1, s1);
+    helper(root2, s2);
+    
+    solve(s1, s2, ans);
+    
     return ans;
 }
 
