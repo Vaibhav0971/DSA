@@ -111,11 +111,74 @@ void lvlOrderTraversal(Node* root){
     }
 }
 
+bool solveIsBST(Node* root, int min, int max){
+    if(root == NULL) return true;
+    
+    bool left = solveIsBST(root -> left, min, root -> data);
+    bool right = solveIsBST(root -> right, root -> data, max);
+    
+    return (root -> data >= min) && (root -> data <= max) && left && right;
+}
+
+bool isBST(Node* root) {
+    if(root == NULL) return true;
+    
+    int min = INT_MIN, max = INT_MAX;
+    
+    return solveIsBST(root, min, max);
+}
+
+class Info{
+    public:
+    int min;
+    int max;
+    int size;
+    bool isBST;
+    
+    Info(){}
+    
+    Info(int min, int max, int size, bool isBST){
+        this -> min = min;
+        this -> max = max;
+        this -> size = size;
+        this -> isBST = isBST;
+    }
+};
+
+Info solveLargestBST(Node* root, int& ans){
+    if(root == NULL){
+        return {INT_MAX, INT_MIN, 0, true};
+    }
+    
+    Info left = solveLargestBST(root -> left, ans);
+    Info right = solveLargestBST(root -> right, ans);
+    
+    Info curr;
+    curr.min = min(left.min, root -> data);
+    curr.max = max(right.max, root -> data);
+    curr.size = left.size + right.size + 1;
+    curr.isBST = (left.isBST && right.isBST && left.max < root -> data && right.min > root -> data);
+    
+    if(curr.isBST) ans = max(curr.size, ans);
+    
+    return curr;
+}
+
+int largestBST(Node *root){
+    int ans = 0;
+    solveLargestBST(root, ans);
+    return ans;
+}
+
+
 int main(){
     Node* root = NULL;
     createBST(root);
     // deleteBST(root, 5);
     // cout<<searchBST(root, 100);
+    // isBST(root);
     lvlOrderTraversal(root);
+    cout<<endl;
+    cout<<largestBST(root);
 }
 // 20 5 10 30 40 50 1 15 -1
